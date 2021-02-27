@@ -888,8 +888,6 @@ function setupDatGui(){
     let cynSphere6=new THREE.CylinderGeometry(0.5, 0.5, 9, 3);
         let cynmaterial6= new THREE.MeshBasicMaterial({color:"#FFC300"});
         cyn6 = new THREE.Mesh(cynSphere6,cynmaterial6);
-        
-       
         cyn6.position.y=6;
         //cyn6.position.x=9;
         cyn6.position.z=1;
