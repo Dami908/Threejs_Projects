@@ -394,7 +394,7 @@ function setupDatGui(){
     cyn4.position.x=5;
     cyn4.position.z=1;
             wheel=new THREE.Object3D();
-            wheel.add(meshed,cyn,cyn1,cyn2,cyn3,cyn4)
+            wheel.add(meshed,meshes,cyn,cyn1,cyn2,cyn3,cyn4)
             wheel.rotation.y=Math.PI/2;
             wheel.position.x=control.x;
             wheel.position.y=control.y;
@@ -579,7 +579,7 @@ function setupDatGui(){
         //cyn6.position.x=9;
         cyn6.position.z=1;
             wheel=new THREE.Object3D();
-            wheel.add(meshed,cyn,cyn1,cyn2,cyn3,cyn4,cyn5,cyn6)
+            wheel.add(meshed,meshes,cyn,cyn1,cyn2,cyn3,cyn4,cyn5,cyn6)
             wheel.rotation.y=Math.PI/2;
             wheel.position.x=control.x;
             wheel.position.y=control.y;
