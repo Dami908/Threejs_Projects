@@ -952,6 +952,7 @@ function render(){
     requestAnimationFrame(render);
     orbitControl.update();
     renderer.render(scene,camera);
+    
 
 }
 
