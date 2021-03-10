@@ -100,7 +100,7 @@ function createGeometry(){
     let geometry1=new THREE.ExtrudeGeometry(shape2,extrusionSettings);
     let material1 = new THREE.MeshBasicMaterial({color:0x00ff00});
     meshes2 = new THREE.Mesh(geometry1,material1);
-    meshes2.position.y=11;
+    meshes2.position.y=19;
     meshes2.position.x=-1.8;
     meshes2.position.z=-6.6;
 
@@ -112,7 +112,7 @@ function createGeometry(){
     box.position.z=0.2;
     box.rotation.z=Math.PI/2;
 
-    let spoke1=new THREE.BoxGeometry(2,19,1.5);
+    let spoke1=new THREE.BoxGeometry(1.5,19,2);
     let boxmaterial1=new THREE.MeshBasicMaterial({color:"#53354a"});
     let box1 = new THREE.Mesh(spoke1,boxmaterial1);
     box1.position.y=8.8;
@@ -136,54 +136,44 @@ function createGeometry(){
     box3.position.z=7.2;
     box3.rotation.x=Math.PI/2;
 
-    let spoke4=new THREE.BoxGeometry(2,19,1.5);
+    let spoke4=new THREE.BoxGeometry(1.5,19,2);
     let boxmaterial4=new THREE.MeshBasicMaterial({color:"#53354a"});
     let box4 = new THREE.Mesh(spoke4,boxmaterial4);
-    box4.position.y=17.8;
-    box4.position.x=-2;
-    box4.position.z=7;
+    box4.position.y=-8.8;
+    box4.position.x=8.8;
+    box4.position.z=-0;
+    box4.rotation.z=Math.PI/2;
 
     let spoke5=new THREE.BoxGeometry(2,19,1.5);
     let boxmaterial5=new THREE.MeshBasicMaterial({color:"#53354a"});
     let box5 = new THREE.Mesh(spoke5,boxmaterial5);
-    box5.position.y=10.8;
-    box5.position.x=8;
-    box5.position.z=7;
+    box5.position.y=-8.8;
+    box5.position.x=-8.8;
+    box5.position.z=-0;
     box5.rotation.z=Math.PI/2;
 
     let spoke6=new THREE.BoxGeometry(2,19,1.5);
     let boxmaterial6=new THREE.MeshBasicMaterial({color:"#53354a"});
     let box6 = new THREE.Mesh(spoke6,boxmaterial6);
-    box6.position.y=10.8;
-    box6.position.x=-11;
+    box6.position.y=-8.8;
+    box6.position.x=3.8;
     box6.position.z=7;
-    box6.rotation.z=Math.PI/2;
+    box6.rotation.x=Math.PI/2;
 
     let spoke7=new THREE.BoxGeometry(2,19,1.5);
     let boxmaterial7=new THREE.MeshBasicMaterial({color:"#53354a"});
     let box7 = new THREE.Mesh(spoke7,boxmaterial7);
     box7.position.y=1;
-    //box7.position.x=-2;
-   // box7.position.z=7;
+    box7.position.x=-2;
+    box7.position.z=7;
 
 
-    //Adds object to scene
-    //scene.add(box);
-    //scene.add(box1);
-    //scene.add(box2);
-    //scene.add(box3);
-    //scene.add(box4);
-    //scene.add(box5);
-    //scene.add(box6);
-    //scene.add(box7);
-    //scene.add(meshes);
-    //scene.add(meshes2);
-    //scene.add(cyn);
+    
 
     pivot = new THREE.Group();
     
     
-    cyn.add(pivot,box,box1,box2,box3)
+    cyn.add(pivot,box,box1,box2,box3,box4,box5,box6)
 
     scene.add( cyn);
 

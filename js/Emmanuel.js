@@ -84,6 +84,7 @@ function createGeometry(){
     //sphere.position.copy(light5.position);
     sphere.castShadow=true;
     material.roughness=0;
+    material.metalness=1;
     sphere.position.y=19;
     sphere.position.x=-15;
     sphere.scale.x=0.5;
