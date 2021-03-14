@@ -1,333 +1,127 @@
-var NUMBER_OF_COLS = 8,
-	NUMBER_OF_ROWS = 8,
-	BLOCK_SIZE = 100;
 
-var BLOCK_COLOUR_1 = '#9f7119',
-	BLOCK_COLOUR_2 = '#debf83',
-	HIGHLIGHT_COLOUR = '#fb0006';
+/***** TASK 1 *****/
 
-var piecePositions = null;
+/**
+ * The following class represents a simplified version of one we
+ * use frequently in different parts of our codebase. We use it
+ * to encapsulate price data so we don't have to pass the raw
+ * data around whenever we need it. Instead of saving the total
+ * price, we save the small parts of it so that we can refer to
+ * that information if we have to (total price = premium + fee).
+ */
+class Price {
+  constructor ({ fee, premium }) {
+      this.fee=fee;
+      this.premium=premium;
+  }
 
-var PIECE_PAWN = 0,
-	PIECE_CASTLE = 1,
-	PIECE_ROUKE = 2,
-	PIECE_BISHOP = 3,
-	PIECE_QUEEN = 4,
-	PIECE_KING = 5,
-	IN_PLAY = 0,
-	TAKEN = 1,
-	pieces = null,
-	ctx = null,
-	json = null,
-	canvas = null,
-	BLACK_TEAM = 0,
-	WHITE_TEAM = 1,
-	SELECT_LINE_WIDTH = 5,
-	currentTurn = WHITE_TEAM,
-	selectedPiece = null;
-function getBlockColour(iRowCounter, iBlockCounter)
-{
-    var cStartColour;
-     
-    // Alternate the block colour
-    if(iRowCounter % 2)
-        cStartColour = (iBlockCounter % 2?BLOCK_COLOUR_1:BLOCK_COLOUR_2);
-    else
-        cStartColour = (iBlockCounter % 2?BLOCK_COLOUR_2:BLOCK_COLOUR_1);
-         
-    return cStartColour;
-}
-function drawBlock(iRowCounter, iBlockCounter)
-{   
-    // Set the background
-    ctx.fillStyle = getBlockColour(iRowCounter, iBlockCounter);
-     
-    // Draw rectangle for the background
-    ctx.fillRect(iRowCounter * BLOCK_SIZE, iBlockCounter * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
- 
-    ctx.stroke();   
-}
-function drawRow(iRowCounter)
-{
-    // Draw 8 block left to right
-    for(iBlockCounter = 0; iBlockCounter < NUMBER_OF_ROWS; iBlockCounter++)
-    {
-        drawBlock(iRowCounter, iBlockCounter);
+  add(...prices) {
+    prices = [...prices, { premium: this.premium, fee: this.fee }];
+    let totalFee = 0;
+    let totalPremium = 0;
+    for (let instance of prices) {
+      totalFee += instance.fee;
+      totalPremium += instance.premium;
     }
-}
-function getImageCoords(pieceCode, bBlackTeam) {
-
-	var imageCoords =  {
-		"x": pieceCode * BLOCK_SIZE,
-		"y": (bBlackTeam ? 0 : BLOCK_SIZE)
-	};
-
-	return imageCoords;
-}
-function drawBoard()
-{   
-    for(iRowCounter = 0; iRowCounter < NUMBER_OF_ROWS; iRowCounter++)
-    {
-        drawRow(iRowCounter);
-    }   
-     
-    // Draw outline
-    ctx.lineWidth = 3;
-    ctx.strokeRect(0, 0, NUMBER_OF_ROWS * BLOCK_SIZE, NUMBER_OF_COLS * BLOCK_SIZE); 
-}
-function drawPiece(curPiece, bBlackTeam) {
-
-	var imageCoords = getImageCoords(curPiece.piece, bBlackTeam);
-
-	// Draw the piece onto the canvas
-	ctx.drawImage(pieces,
-		imageCoords.x, imageCoords.y,
-		BLOCK_SIZE, BLOCK_SIZE,
-		curPiece.col * BLOCK_SIZE, curPiece.row * BLOCK_SIZE,
-		BLOCK_SIZE, BLOCK_SIZE);
-}
-function drawTeamOfPieces(teamOfPieces, bBlackTeam) {
-	var iPieceCounter;
-
-	// Loop through each piece and draw it on the canvas	
-	for (iPieceCounter = 0; iPieceCounter < teamOfPieces.length; iPieceCounter++) {
-		drawPiece(teamOfPieces[iPieceCounter], bBlackTeam);
-	}
+    return { fee: totalFee, premium: totalPremium };
+  }
 }
 
-function drawPieces() {
-	drawTeamOfPieces(json.black, true);
-	drawTeamOfPieces(json.white, false);
+/**
+ * Right now this function doesn't work because the Price class
+ * is not implemented. Your task is to update the class so that
+ * the following code produces the correct result as held by the
+ * `result` constant.
+ *
+ * Note that the `.add()` function can take any number of
+ * arguments, not just 2 as used here.
+ */
+function task1 () {
+  const priceA = new Price({
+    premium: 100,
+    fee: 10,
+  })
+  const priceB = new Price({
+    premium: 120,
+    fee: 15,
+  })
+  const priceC = new Price({
+    premium: 80,
+    fee: 20,
+  })
+
+  const result = priceA.add(priceB, priceC)
+
+  // result should have a premium of 300 and a fee of 45
+  return result
 }
-function defaultPositions()
-{
-    json = 
-    {
-        "white": 
-        [
-            {
-                "piece": PIECE_CASTLE,
-                "row": 0,
-                "col": 0,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_ROUKE,
-                "row": 0,
-                "col": 1,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_BISHOP,
-                "row": 0,
-                "col": 2,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_KING,
-                "row": 0,
-                "col": 3,
-                "status": IN_PLAY
-            },  
-            {
-                "piece": PIECE_QUEEN,
-                "row": 0,
-                "col": 4,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_BISHOP,
-                "row": 0,
-                "col": 5,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_ROUKE,
-                "row": 0,
-                "col": 6,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_CASTLE,
-                "row": 0,
-                "col": 7,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 1,
-                "col": 0,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 1,
-                "col": 1,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 1,
-                "col": 2,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 1,
-                "col": 3,
-                "status": IN_PLAY
-            },  
-            {
-                "piece": PIECE_PAWN,
-                "row": 1,
-                "col": 4,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 1,
-                "col": 5,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 1,
-                "col": 6,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 1,
-                "col": 7,
-                "status": IN_PLAY
+
+console.log(task1())
+
+/***** TASK 2 *****/
+
+/**
+ * Requirements have now changed and we now need to allow prices
+ * to be composed of sub prices.
+ */
+class NestedPrice extends Price {
+  /**
+   * The argument `prices` should be an array of instances of
+   * the class Price or NestedPrice.
+   */
+  constructor (prices) {
+    super({});
+    this.prices = [...prices];
+  }
+
+  nested(price, result) {
+    const self = this;
+        for (let dep of price) {
+            if (dep.constructor.name === 'Price') {
+                result.push(dep)
+            } else {
+                self.nested(dep.prices, result) 
             }
-        ],
-        "black": 
-        [
-            {
-                "piece": PIECE_CASTLE,
-                "row": 7,
-                "col": 0,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_ROUKE,
-                "row": 7,
-                "col": 1,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_BISHOP,
-                "row": 7,
-                "col": 2,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_KING,
-                "row": 7,
-                "col": 3,
-                "status": IN_PLAY
-            },  
-            {
-                "piece": PIECE_QUEEN,
-                "row": 7,
-                "col": 4,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_BISHOP,
-                "row": 7,
-                "col": 5,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_ROUKE,
-                "row": 7,
-                "col": 6,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_CASTLE,
-                "row": 7,
-                "col": 7,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 6,
-                "col": 0,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 6,
-                "col": 1,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 6,
-                "col": 2,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 6,
-                "col": 3,
-                "status": IN_PLAY
-            },  
-            {
-                "piece": PIECE_PAWN,
-                "row": 6,
-                "col": 4,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 6,
-                "col": 5,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 6,
-                "col": 6,
-                "status": IN_PLAY
-            },
-            {
-                "piece": PIECE_PAWN,
-                "row": 6,
-                "col": 7,
-                "status": IN_PLAY
-            }
-        ]       
-    };
-}
-function draw()
-{   // Main entry point got the HTML5 chess board example
-    canvas = document.getElementById('board');
-    // Canvas supported?
-    if(canvas.getContext)
-    {
-        ctx = canvas.getContext('2d');
-        // Calculdate the precise block size
-        BLOCK_SIZE = canvas.height / NUMBER_OF_ROWS; 
-        // Draw the background
-        drawBoard();
-        defaultPositions();
-        // Draw pieces
-        pieces = new Image();
-        pieces.src = 'https://geeksretreat.files.wordpress.com/2012/06/pieces.png';
-        pieces.onload = drawPieces;
-        //canvas.addEventListener('click', board_click, false);
-    }
-    else
-    {
-        alert("Canvas not supported!");
-    }
+        }
+    return result
+  }
+
+  add(...prices) {
+    const flat = []
+    const flatArray = this.nested([...prices, ...this.prices], flat)
+    const price = {fee:0, premium:0}
+    return flatArray.reduce((p1,p2) => { 
+       price.fee = p1.fee + p2.fee
+       price.premium = p1.premium + p2.premium
+       return price
+    })
+  }
 }
 
+/**
+ * Your task is to implement `NestedClass` so that the
+ * following code also produces the correct results without
+ * affecting `Price` (i.e.: both classes need to work on their
+ * own).
+ */
+function task2 () {
+  const priceA = new NestedPrice([
+    new Price({ fee: 5, premium: 50}),
+    new Price({ fee: 10, premium: 130}),
+  ])
+  const priceB = new NestedPrice([
+    new Price({ fee: 10, premium: 70}),
+    new Price({ fee: 0, premium: 30}),
+    new NestedPrice([
+      new Price({ fee: 0, premium: 10 }),
+      new Price({ fee: 5, premium: 25 }),
+    ]),
+  ])
 
+  const result = priceA.add(priceB)
 
-   
-  
+  // result should have a premium of 315 and a fee of 30
+  return result
+}
+
+console.log(task2())
